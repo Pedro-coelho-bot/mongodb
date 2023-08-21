@@ -1,0 +1,96 @@
+use('projetobd')
+//exemplo de um insert
+db.filmes.insertOne({
+    "titulo": "Star Wars",
+    "ano": 1978,
+    "diretor": "george Lucas"
+})
+use('projetobd')
+db.filmes.find() // select *from filmes
+
+
+use('projetobd')
+//exemplo de um insert
+db.filmes.insertOne({
+    "titulo": "🦁😍",
+    "ano": 1994,
+    "diretor": "Roger Allers",
+    "titulo-ar" : "الأسد الملك"
+})
+
+use('projetobd')
+db.filmes.insertMany([
+    {"titulo":"O exorcista", "ano": 1973, "diretor": "William fridkin"},
+    {"titulo":"007 Sem Tempo Para Morrer", "ano": 2020,
+    "diretor": "Cary joli Fukunaga"}
+])
+
+use('projetobd')
+// select titulo, ano from filmes
+db.filmes.find({},{"_id":0, "titulo":1, "ano":1})
+
+use('projetobd')
+// select titulo, ano from filmes where ano "1973"
+db.filmes.find({"ano": 1973},{"_id":0, "titulo":1, "ano":1})
+
+// OPERADORE DECOMPARAÇÃO NO MONGODB
+use('projetobd')
+// TITULO E DIRETOR DOS FILMES DOS ANOS 80
+db.filmes.find({"ano": {$gte: 1970, $lte:1979}},
+                {_id:0, titulo:1, diretor:1})
+
+use('projetobd')
+//ano, titulo ediretor dos filmes cujo diretor seja george Lucas//
+db.filmes.find({"diretor":{$eq: "Geoge LUcas"}},
+                {_id:0, ano:0, titulo:1, diretor:1})
+
+use('projetobd')
+// titulos defilmes que sejam do ano de 1973, 1978 ou 1980
+db.filmes.find({ano: {$in:[1973,1978, 1980]}},
+                {_id:0, titulo:1, ano:1})
+
+// OPERADORES LÓGICOS NO MONGODB
+use('projetobd')
+// titulo e ano dos filmes cujo o titulo é diferente a guerra ds estrelas e o ano seja maior que 1980*/
+db.filmes.find({ $and: [
+    {titulo: {$ne: "Star Wars"}},
+    {ano: {$gt: 1980}}
+]},
+{_id:0, titulo:1, ano: 1})
+
+use('projetobd')
+/* titulo e ao dos filmes cujo titulo é igual a Guerra NAs Estrelas OU o ano é maior que 1980*///
+db.filmes.find({$or[
+    {titulo: {#eq: "Star Wars"}},
+    {ano : {$gt: 1980}}
+]},{_id:0, titulo:1, ano:1})
+
+use('projetobd')
+/* Utilizando Expressão Regular nas bucas */
+// i = insensitive case
+db.filmes.find({titulo: /Star Wars/i})
+
+// que comece com sta (usamos o ^ da ER)
+use('projetobd')
+db.filmes.find({titulo: /^sta/i})
+
+// que termine co wars (usamos 0 $ da ER)
+use('projetobd')
+db.filmes.find({titulo: /wars$/i})
+
+/* SORT*/
+use('projetobd')
+db.filmes.find({},{titulo:1, ano:1, _id:0})
+            .sort({titulo: 1}) // 1=>ASC -1=>DESC
+
+/* retorne todos s filmes cujo titulo contenha🦁 
+ou o ano esteja entre 1980 e 1990.
+ordene pelo ano em ordem crescente
+*/
+
+use("projetobd")
+db.filmes.find({$or: [
+    {titulo:/🦁/i},
+    {ano: {%gte: 1980, $lte: 1990}}
+]},
+{}).sort({ano:1})
